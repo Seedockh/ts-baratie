@@ -1,0 +1,21 @@
+{
+  "name": "ts-baratie",
+  "version": "1.0.0",
+  "description": "https://github.com/pu-erh/pp-baratie",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seedockh/ts-baratie.git"
+  },
+  "author": "Pierre Hérissé",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Seedockh/ts-baratie/issues"
+  },
+  "homepage": "https://github.com/Seedockh/ts-baratie#readme"
+}
