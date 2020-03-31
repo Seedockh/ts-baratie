@@ -1,33 +1,37 @@
 // Main processes file
-import cluster from 'cluster'
-import http from 'http'
 import os from'os'
 import readline from 'readline'
+import { AsyncResource } from 'async_hooks'
 
-import { log } from './stdout'
+import { KitchenFactory } from './factory'
+import { log } from './print/stdout'
 
 class Baratie {
-  private static instance: Baratie | null = null
-  private cookingTimeCoef: string = process.argv[2]
-  private cooksPerKitchen: string = process.argv[3]
-  private ingredientSwapTime: string = process.argv[4]
-  command: Command
+  private cookingTimeCoef: number = parseInt(process.argv[2])
+  private cooksPerKitchen: number = parseInt(process.argv[3])
+  private ingredientReloadTime: number = parseInt(process.argv[4])
+  public factory: KitchenFactory
+  public static command: Command
 
   constructor() {
     log(`
                 /                   ||     \\
                /____________________||______\\
                       \\o            ||
-         ______________|____________||_______
-        /                                    \\
-       /   ~~~  WELCOME ON THE BARATIE ~~~   |
-       \\                      ___            |
-        \\____________________|___|___________/
+         ____#########_|_###########||#####__
+        /                                    |___
+       /   ~~~  WELCOME ON THE BARATIE ~~~   |  /_
+       \\                      ___            |___/
+        \\____________________|___|___________|
    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ \\----\\ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
   °°°°°°°°°°°°°°°°°°°°°°°°°°°°\\----\\°°°°°°°°°°°°°°°°°°°°°°°
       `, '#AD1F02')
 
-    this.printStatus()
+    this.factory = new KitchenFactory({
+      cookingTimeCoef: this.cookingTimeCoef,
+      cooksPerKitchen: this.cooksPerKitchen,
+      ingredientReloadTime: this.ingredientReloadTime,
+    })
   }
 
 
@@ -36,9 +40,9 @@ class Baratie {
 ========== STATUS =========
 Cooking Time Multiplier : ${this.cookingTimeCoef}
 Maximum Cooks/Kitchen : ${this.cooksPerKitchen}
-Ingredients Reload Time : ${this.ingredientSwapTime}
-Commands : ${this.command ? this.command.length : '0'}
-Cooks Occupancy : /
+Ingredients Reload Time : ${this.ingredientReloadTime}
+Pending Commands: ${Baratie.command ? Baratie.command.length : '0'}
+Cooks Occupancy : ${KitchenFactory.getCooksOccupancy()}
 Cooks Ingredients Stock : /
 =============================
 `)
@@ -50,30 +54,6 @@ Cooks Ingredients Stock : /
       /!\\  ${order}  /!\\
     `, '#ff0000')
   }
-  /*
-
-  const nbCPUS = os.cpus().length
-  //console.log(process.argv)
-  console.log(`Number of CPUs : ${nbCPUS}`)
-
-  if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`)
-
-    // Fork workers
-    //for (let i = 0; i < nbCPUS; i++) cluster.fork()
-
-    //cluster.on('exit', (worker, code, signal) => console.log(`worker ${worker.process.pid} died`))
-
-  } else {
-    http.createServer((req, res) => {
-      res.writeHead(200)
-      res.end('hello world\n')
-    }).listen(8000)
-
-    //console.log(`Worker ${process.pid} started`)
-  }
-
-  */
 }
 
 export default Baratie

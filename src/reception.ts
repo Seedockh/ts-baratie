@@ -3,17 +3,15 @@ import readline from 'readline'
 
 import Baratie from './baratie'
 import { DishType, DishSize } from './defs/dish'
-import { log } from './stdout'
+import { log } from './print/stdout'
 
 export default class Reception extends Baratie {
   private wicket: readline.Interface
-  private validOrder: boolean = false
 
   constructor() {
     super()
-
     // Create Reception prompt
-    this.wicket = readline.createInterface({ input: process.stdin, output: process.stdout })
+    this.wicket = readline.createInterface({ input: process.stdin })
     this.wicket.on("close", () => process.exit(0))
 
     log(`          o
@@ -22,23 +20,25 @@ export default class Reception extends Baratie {
     | RECEPTION |
     |___________|
           `)
-          
+
     this.takeOrder()
   }
 
-  public takeOrder() {
-    log(`   Welcome traveler, may I take your order ?`)
-
-    this.wicket.question(`   >  `, (order: string): void => {
+  public async takeOrder() {
+    log(`Welcome traveler, may I take your order ?`)
+    this.wicket.question('', async (order: string): Promise<void> => {
       if (order === 'status') {
         this.printStatus()
-        this.takeOrder()
-      } else this.serializeOrder(order)
+      } else {
+        this.serializeOrder(order)
+        this.factory.dispatchOrders(Baratie.command)
+      }
+      this.takeOrder()
     })
   }
 
   private serializeOrder(order) {
-    const builtOrder: Order[] = this.command ? [ ...this.command ] : []
+    const builtOrder: Order[] = Baratie.command ? [ ...Baratie.command ] : []
     const orders = order.split(';')
 
     orders.map(ordr => {
@@ -59,9 +59,7 @@ export default class Reception extends Baratie {
       }
     })
 
-    this.command = builtOrder
-    this.printStatus()
-    this.takeOrder()
+    Baratie.command = builtOrder
   }
 
   private deserializeOrder(order) { }
