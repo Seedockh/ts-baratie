@@ -22,6 +22,8 @@ export default class Reception extends Baratie {
     | RECEPTION |
     |___________|
           `)
+          
+    this.takeOrder()
   }
 
   public takeOrder() {
