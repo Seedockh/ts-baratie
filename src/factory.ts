@@ -27,7 +27,7 @@ export class KitchenFactory extends AsyncResource {
       for (let j=1; j <= order.quantity; j++) {
         if (availIndexes !== undefined) {
           let kitchen = KitchenFactory.kitchens[availIndexes.kitchenIndex]
-          let cook = KitchenFactory.kitchens[availIndexes.kitchenIndex].cooks[availIndexes.cookIndex]
+          let cook = kitchen.cooks[availIndexes.cookIndex]
           log(`Cook available found !`)
           kitchen.process.send({ order: order, cook: availIndexes.cookIndex, status: 'cooking' })
         // If no kitchen is available to cook, send to first available pending
