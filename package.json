@@ -2,11 +2,24 @@
   "name": "ts-baratie",
   "version": "1.0.0",
   "description": "https://github.com/pu-erh/pp-baratie",
-  "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "main": "src/index.ts",
+  "dependencies": {
+    "@types/node": "^13.9.5",
+    "chalk": "^3.0.0",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.8.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
+    "typescript": "^3.8.3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "start": "yarn nodemon"
   },
   "repository": {
     "type": "git",
